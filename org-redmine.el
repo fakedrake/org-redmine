@@ -37,7 +37,7 @@
   (require 'cl))
 (require 'org)
 (require 'json)
-(require 'anything)
+;; (require 'anything)
 
 (defconst org-redmine-config-default-limit 25
   "Default value the number of items to be present in the response.
@@ -456,7 +456,7 @@ Example.
 ;;------------------------------
 (defun org-redmine-get-issue (issue-id)
   ""
-  (interactive "sIssue ID: ")
+  (interactive (completing-read "Issue: " (org-redmine-get-issue-all)))
   (let (issue)
     (condition-case err
         (progn
@@ -467,18 +467,18 @@ Example.
        (message "%s: Can't find issue #%s on %s"
                 (error-message-string err) issue-id org-redmine-uri)))))
 
-(defun org-redmine-anything-show-issue-all (&optional me)
-  "Display recent issues using `anything'"
-  (interactive "P")
-  (anything
-   `(((name . "Issues")
-      (candidates . ,(org-redmine-get-issue-all me))
-      (candidate-transformer . org-redmine-transformer-issues-source)
-      (volatile)
-      (action . (("Open Browser"
-                  . (lambda (issue) (browse-url (org-redmine-issue-uri issue))))
-                 ("Insert Subtree"
-                  . (lambda (issue) (org-redmine-insert-subtree issue)))))))
-   ))
+;; (defun org-redmine-ido-show-issue-all (&optional me)
+;;   "Display recent issues using `anything'"
+;;   (interactive "P")
+;;   (anything
+;;    `(((name . "Issues")
+;;       (candidates . ,(org-redmine-get-issue-all me))
+;;       (candidate-transformer . org-redmine-transformer-issues-source)
+;;       (volatile)
+;;       (action . (("Open Browser"
+;;                   . (lambda (issue) (browse-url (org-redmine-issue-uri issue))))
+;;                  ("Insert Subtree"
+;;                   . (lambda (issue) (org-redmine-insert-subtree issue)))))))
+;;    ))
 
 (provide 'org-redmine)
